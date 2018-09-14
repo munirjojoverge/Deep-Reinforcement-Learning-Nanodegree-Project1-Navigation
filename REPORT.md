@@ -38,10 +38,10 @@ This report provides a description of the implementation for the Deep Reinforcem
     | NoisyNet               |             301             |             15.60              |
 
     Multiple tests (1 comparative only shown here) suggest that NoisyNet does in fact improve the scores of our agent.
-      
+
 
     **The agent uses 2 of these networks to implement a Double DQN [3]**. As explained on Udacity's lectures, the idea of Double Q-learning is to reduce overestimations by decomposing the max operation in the target into action selection and action evaluation. Although not fully decoupled, the target network in the DQN architecture provides a natural candidate for the second value function, without having to introduce additional networks. On the referenced paper, they proposed to evaluate the greedy policy according to the online network, but using the target network to estimate its value. You'll see the details of this implementation mostly on the "learn" method of the Agent class.
-
+    
     Last but not least for this initial simple project, **the agent also uses the Experience Replay.** Experience replay lets online reinforcement learning agents remember and reuse experiences from the past. In this project, experience transitions were uniformly sampled from a replay memory. However, this approach simply replays transitions/experiences at the same frequency that they were originally experienced, regardless of their significance. Including a priority or importance to these experiences will be implemented very soon following Prioritized Experience Replay [4]
 
 2. Hyper-parameters:
@@ -68,82 +68,81 @@ This report provides a description of the implementation for the Deep Reinforcem
 
       Image 1
 
-      ![](/home/munirjojo-verge/deep-reinforcement-learning/p1_navigation/Banana_Jojo_basic/Images/Image100.png)
+      ![](https://github.com/munirjojoverge/Deep-Reinforcement-Learning-Nanodegree-Project1-Navigation/blob/master/Images/Image100.png)
 
       Image 2
 
-      ![](/home/munirjojo-verge/deep-reinforcement-learning/p1_navigation/Banana_Jojo_basic/Images/Image070.png)
+      ![](https://github.com/munirjojoverge/Deep-Reinforcement-Learning-Nanodegree-Project1-Navigation/blob/master/Images/Image070.png)
 
       Image 3
 
-      ![](/home/munirjojo-verge/deep-reinforcement-learning/p1_navigation/Banana_Jojo_basic/Images/Image065.png)
+      ![](https://github.com/munirjojoverge/Deep-Reinforcement-Learning-Nanodegree-Project1-Navigation/blob/master/Images/Image065.png)
 
       Image 4
 
-      ![](/home/munirjojo-verge/deep-reinforcement-learning/p1_navigation/Banana_Jojo_basic/Images/Image050_1.png)
+      ![](https://github.com/munirjojoverge/Deep-Reinforcement-Learning-Nanodegree-Project1-Navigation/blob/master/Images/Image050_1.png)
 
       Image 5
 
-      ![](/home/munirjojo-verge/deep-reinforcement-learning/p1_navigation/Banana_Jojo_basic/Images/Image040_Normal.png)
+      ![](https://github.com/munirjojoverge/Deep-Reinforcement-Learning-Nanodegree-Project1-Navigation/blob/master/Images/Image040_Normal.png)
 
       Image 6
 
-      ![](/home/munirjojo-verge/deep-reinforcement-learning/p1_navigation/Banana_Jojo_basic/Images/Image030.png)
+      ![](https://github.com/munirjojoverge/Deep-Reinforcement-Learning-Nanodegree-Project1-Navigation/blob/master/Images/Image030.png)
 
       Image 7
 
-      ![](/home/munirjojo-verge/deep-reinforcement-learning/p1_navigation/Banana_Jojo_basic/Images/Image020.png)
+      ![](https://github.com/munirjojoverge/Deep-Reinforcement-Learning-Nanodegree-Project1-Navigation/blob/master/Images/Image020.png)
 
 
-
-      It's clear that by changing (reducing) only the eps_start we see a speeding up in the learning process as a reflection that the agent reaches the PASS criteria earlier. The Agent does NOT need too much "exploration" to realize the underlying rules of the environment and can start "exploiting" this knowledge faster. We also see a clear decay in the rate between scores and episodes after about 500-700 episodes.  Although the numbers show a continues average reward growth, its gradient significantly decreases and seems to reach a plateau. The question that rises is: Is there nothing else to learn or is the Agent unable to learn anything else? To answer this question a few other questions rise: Should we increase the number of episodes? Should we increase the length of each episode? Should we decrease the epsilon decay so, even though the agent will learn slower, we might give more chances to "explore" and learn more the underlying patterns and dynamics of the environment? These questions do not have a straight and simple answers and we need to explore them.  
-
-      Let's start with making the length of each episode larger: max_t = 2000. Let's do 2 comparatives, first with the eps_start = 0.3 and go from max_t =1000 to max_t=2000
-
+It's clear that by changing (reducing) only the eps_start we see a speeding up in the learning process as a reflection that the agent reaches the PASS criteria earlier. The Agent does NOT need too much "exploration" to realize the underlying rules of the environment and can start "exploiting" this knowledge faster. We also see a clear decay in the rate between scores and episodes after about 500-700 episodes.  Although the numbers show a continues average reward growth, its gradient significantly decreases and seems to reach a plateau. The question that rises is: Is there nothing else to learn or is the Agent unable to learn anything else? To answer this question a few other questions rise: Should we increase the number of episodes? Should we increase the length of each episode? Should we decrease the epsilon decay so, even though the agent will learn slower, we might give more chances to "explore" and learn more the underlying patterns and dynamics of the environment? These questions do not have a straight and simple answers and we need to explore them.  
+​    
+Let's start with making the length of each episode larger: max_t = 2000. Let's do 2 comparatives, first with the eps_start = 0.3 and go from max_t =1000 to max_t=2000
+​    
       ```
       n_episodes=2000, =2000, eps_start = 0.3, eps_end=0.01, eps_decay=0.995
       ```
-
+    
       | max_t | Episodes Req to PASS (>=13) | Avg reward after 2000 episodes | Img  |
       | ----- | --------------------------- | ------------------------------ | ---- |
       | 1000  | 135                         | 14.66                          | 1    |
       | 2000  | 142                         | 15.64                          | 2    |
-
+    
       Image 1
-
-      ![](/home/munirjojo-verge/deep-reinforcement-learning/p1_navigation/Banana_Jojo_basic/Images/Image030.png)
-
+    
+      ![](https://github.com/munirjojoverge/Deep-Reinforcement-Learning-Nanodegree-Project1-Navigation/blob/master/Images/Image030.png)
+    
       Image 2
-
-      ![](/home/munirjojo-verge/deep-reinforcement-learning/p1_navigation/Banana_Jojo_basic/Images/Image030_2.png)
-
+    
+      ![](https://github.com/munirjojoverge/Deep-Reinforcement-Learning-Nanodegree-Project1-Navigation/blob/master/Images/Image030_2.png)
+    
       Let's try now with the eps_start = 0.4 and go from max_t =1000 to max_t=2000
-
+    
       ```
       n_episodes=2000, =2000, eps_start = 0.4, eps_end=0.01, eps_decay=0.995
       ```
-
+    
       | max_t | Episodes Req to PASS (>=13) | Avg reward after 2000 episodes | Img  |
       | ----- | --------------------------- | ------------------------------ | ---- |
       | 1000  | 364                         | 15.76                          | 1    |
       | 2000  | 313                         | 15.61                          | 2    |
-
+    
       Image 1
-
-      ![](/home/munirjojo-verge/deep-reinforcement-learning/p1_navigation/Banana_Jojo_basic/Images/Image040_Normal.png)
-
+    
+      ![](https://github.com/munirjojoverge/Deep-Reinforcement-Learning-Nanodegree-Project1-Navigation/blob/master/Images/Image040_Normal.png)
+    
       Image 2
-
-      ![](/home/munirjojo-verge/deep-reinforcement-learning/p1_navigation/Banana_Jojo_basic/Images/Image040_long2.png)
-
+    
+      ![](https://github.com/munirjojoverge/Deep-Reinforcement-Learning-Nanodegree-Project1-Navigation/blob/master/Images/Image040_long2.png)
+    
       As you can see, there are no significant changes in the Agent's performance and it doesn't look like extending the episodes' lengths is a path we want to explore deeper before checking the other parameters.
-
+    
       It's worth trying to decrease the epsilon decay rate (by increasing the eps_decay). Remember, for instance, that when epsilon starts at 0.7 it will take only 850 episodes to reach it's minimum value of 0.01. From that point on (850 through 2000 episodes) the agent is as greedy as it can reasonably be. During this period (when epsilon it's at is minimum and the agent should have learned all it could) we can still see significant instability measured by the standard deviation between each episode reward and the average for the last 100 episodes. This fact is easily visible on the graphs (Scores Vs Episode#) by looking at the width of the plot. We see very close episodes (40 episodes difference) going from 9.00 score to 27.0. Bellow is a comparative table with the associated graphs that show that "learning slower is not learning more/better" We can still observe a clear instability. Therefore, instability is not solved by learning slower (smaller epsilon decay)
-
+    
       ```
       n_episodes=2000, max_t=1000, eps_start = 0.5, eps_end=0.01
       ```
-
+    
       | eps_decay | Episodes Req to PASS (>=13) | Max Avg reward (after 2000 episodes ) |
       | :-------: | :-------------------------: | :-----------------------------------: |
       |   0.995   |             301             |                 15.60                 |
@@ -169,11 +168,11 @@ Which will lead us to:
 
 ### References
 
-[1] Rainbow: Combining Improvements in Deep Reinforcement Learning  (https://arxiv.org/abs/1710.02298)
-[2] Playing Atari with Deep Reinforcement Learning (http://arxiv.org/abs/1312.5602)
-[3] Deep Reinforcement Learning with Double Q-learning (https://arxiv.org/abs/1509.06461)
-[4] Prioritized Experience Replay (https://arxiv.org/abs/1511.05952)
-[5] Dueling Network Architectures for Deep Reinforcement Learning
-[6] Reinforcement Learning: An Introduction
-[7] A Distributional Perspective on Reinforcement Learning (https://arxiv.org/abs/1707.06887)
-[8] Noisy Networks for Exploration (https://arxiv.org/abs/1706.10295)
+* [1] Rainbow: Combining Improvements in Deep Reinforcement Learning  (https://arxiv.org/abs/1710.02298)
+* [2] Playing Atari with Deep Reinforcement Learning (http://arxiv.org/abs/1312.5602)
+* [3]  Deep Reinforcement Learning with Double Q-learning (https://arxiv.org/abs/1509.06461)
+* [4] Prioritized Experience Replay (https://arxiv.org/abs/1511.05952)
+* [5] Dueling Network Architectures for Deep Reinforcement Learning
+* [6] Reinforcement Learning: An Introduction (https://s3-us-west-1.amazonaws.com/udacity-drlnd/bookdraft2018.pdf)
+* [7] A Distributional Perspective on Reinforcement Learning (https://arxiv.org/abs/1707.06887)
+* [8] Noisy Networks for Exploration (https://arxiv.org/abs/1706.10295)
